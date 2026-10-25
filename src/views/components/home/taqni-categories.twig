@@ -1,0 +1,20 @@
+{#
+| Variable                 | Type     | Description                    |
+|--------------------------|----------|--------------------------------|
+| component.items[]        | object[] | icon / title / subtitle / url  |
+#}
+<section component-id="{{ componentId }}" class="s-block tq-cats">
+  <div class="container">
+    <div class="tq-cats__grid">
+      {% for item in component.items %}
+        <a href="{{ item.url ?: '#' }}" class="tq-cat {{ loop.first ? 'is-active' : '' }}">
+          <span class="tq-cat__icon"><i class="{{ item.icon }}"></i></span>
+          <span class="tq-cat__text">
+            <strong>{{ item.title }}</strong>
+            <small>{{ item.subtitle }}</small>
+          </span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>

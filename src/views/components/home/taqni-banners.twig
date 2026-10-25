@@ -1,0 +1,26 @@
+{#
+| Variable                   | Type     | Description                                   |
+|----------------------------|----------|-----------------------------------------------|
+| component.banners[]        | object[] | title / button / url / image / style          |
+#}
+{% set fallback = ['images/taqni/banner-php.png', 'images/taqni/banner-sites.png', 'images/taqni/banner-systems.png'] %}
+{% set styles = ['blue', 'purple', 'teal'] %}
+<section component-id="{{ componentId }}" class="s-block tq-banners">
+  <div class="container">
+    <div class="tq-banners__grid">
+      {% for banner in component.banners %}
+        {% set style = styles[(loop.index0) % 3] %}
+        {% set img = banner.image ? banner.image : fallback[(loop.index0) % 3]|asset %}
+        <a href="{{ banner.url ?: '#' }}" class="tq-banner tq-banner--{{ style }}">
+          <div class="tq-banner__text">
+            <h3>{{ banner.title }}</h3>
+            {% if banner.button %}
+              <span class="tq-banner__btn"><i class="sicon-arrow-left"></i> {{ banner.button }}</span>
+            {% endif %}
+          </div>
+          <img class="tq-banner__img" src="{{ img }}" alt="{{ banner.title }}" loading="lazy">
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>

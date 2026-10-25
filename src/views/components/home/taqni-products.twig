@@ -1,0 +1,60 @@
+{#
+| Variable                   | Type                  | Description                  |
+|----------------------------|-----------------------|------------------------------|
+| component.title            | string                | Section title                |
+| component.products         | Product[] *Collection | Selected products            |
+| component.display_all_url  | string                | "View all" link              |
+| component.display_all_text | string                | "View all" text              |
+#}
+{% set display_all = component.display_all_url %}
+<section component-id="{{ componentId }}" class="s-block tq-products">
+  <div class="container">
+    <div class="tq-section-head">
+      <h2><i class="sicon-fire"></i> {{ component.title ?: 'المنتجات الأكثر طلباً' }}</h2>
+      {% if display_all and display_all != '#' %}
+        <a href="{{ display_all }}" class="tq-link">{{ component.display_all_text ?: 'عرض جميع المنتجات' }} <i class="sicon-arrow-left"></i></a>
+      {% endif %}
+    </div>
+
+    {% if component.products|length %}
+      <div class="tq-products__grid">
+        {% for product in component.products %}
+          <article class="tq-pcard">
+            <div class="tq-pcard__body">
+              <a href="{{ product.url }}" class="tq-pcard__name">{{ product.name }}</a>
+              {% if product.subtitle %}<p class="tq-pcard__sub">{{ product.subtitle }}</p>{% endif %}
+              <div class="tq-pcard__price">
+                {% if product.is_on_sale %}
+                  <strong>{{ product.sale_price|money }}</strong>
+                  <del>{{ product.regular_price|money }}</del>
+                {% else %}
+                  <strong>{{ product.price|money }}</strong>
+                {% endif %}
+              </div>
+              <div class="tq-pcard__actions">
+                <salla-add-product-button product-id="{{ product.id }}" product-status="{{ product.status }}" product-type="{{ product.type }}" width="wide">
+                  <i class="sicon-shopping-bag"></i> <span>{{ component.cart_text ?: 'أضف إلى السلة' }}</span>
+                </salla-add-product-button>
+                <button type="button" class="tq-pcard__wish" aria-label="wishlist"
+                        onclick="salla.wishlist.toggle({{ product.id }})">
+                  <i class="sicon-heart"></i>
+                </button>
+              </div>
+            </div>
+            <a href="{{ product.url }}" class="tq-pcard__media">
+              <img src="{{ product.image.url ? product.image.url : 'images/s-empty.png'|asset }}" alt="{{ product.image.alt ?: product.name }}" loading="lazy">
+              {% if product.rating and product.rating.stars %}
+                <span class="tq-pcard__rating"><i class="sicon-star2"></i> {{ product.rating.stars }}</span>
+              {% endif %}
+              {% if product.promotion_title %}
+                <span class="tq-pcard__tag">{{ product.promotion_title }}</span>
+              {% endif %}
+            </a>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <salla-products-list source="latest" limit="4"></salla-products-list>
+    {% endif %}
+  </div>
+</section>

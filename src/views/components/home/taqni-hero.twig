@@ -1,0 +1,62 @@
+{#
+| Variable                  | Type     | Description                         |
+|---------------------------|----------|-------------------------------------|
+| component.badge           | string   | Small pill text above the title     |
+| component.title           | string   | First title line (dark)             |
+| component.highlight       | string   | Second title line (primary color)   |
+| component.description     | string   | Paragraph under the title           |
+| component.image           | string   | Illustration image                  |
+| component.features[]      | object[] | icon / title / text                 |
+| component.primary_text    | string   | Main button text                    |
+| component.primary_url     | string   | Main button link                    |
+| component.secondary_text  | string   | Secondary button text               |
+| component.secondary_url   | string   | Secondary button link               |
+#}
+{% set hero_image = component.image ? component.image : 'images/taqni/hero.png'|asset %}
+<section component-id="{{ componentId }}" class="s-block tq-hero">
+  <div class="container tq-hero__inner">
+    <div class="tq-hero__content">
+      {% if component.badge %}
+        <span class="tq-hero__badge"><span class="tq-dot"></span>{{ component.badge }}</span>
+      {% endif %}
+      <h2 class="tq-hero__title">
+        <span>{{ component.title }}</span>
+        {% if component.highlight %}<span class="tq-hero__highlight">{{ component.highlight }}</span>{% endif %}
+      </h2>
+      {% if component.description %}
+        <p class="tq-hero__desc">{{ component.description }}</p>
+      {% endif %}
+
+      {% if component.features|length %}
+        <div class="tq-hero__features">
+          {% for item in component.features %}
+            <div class="tq-hero__feature">
+              <span class="tq-icon-circle"><i class="{{ item.icon }}"></i></span>
+              <div>
+                <strong>{{ item.title }}</strong>
+                <small>{{ item.text }}</small>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="tq-hero__actions">
+        {% if component.primary_text %}
+          <a href="{{ component.primary_url ?: '#' }}" class="tq-btn tq-btn--primary">
+            {{ component.primary_text }} <i class="sicon-arrow-left"></i>
+          </a>
+        {% endif %}
+        {% if component.secondary_text %}
+          <a href="{{ component.secondary_url ?: '#' }}" class="tq-btn tq-btn--outline">
+            <i class="sicon-play"></i> {{ component.secondary_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="tq-hero__media">
+      <img src="{{ hero_image }}" alt="{{ component.title }}" loading="eager" fetchpriority="high">
+    </div>
+  </div>
+</section>
